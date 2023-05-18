@@ -10,6 +10,7 @@ const SuratKeluar = () => {
     * React Hook untuk state 
     */
     const [data, setData] = useState([]);
+    const [token, setToken] = useState('');
     const [records, setRecords] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -95,12 +96,28 @@ const SuratKeluar = () => {
      */
     useEffect(() => {
         const fetchData = async () => {
+            // Get the token from localStorage or any other storage mechanism
+            const privateToken = localStorage.getItem('token');
+            if (!privateToken) {
+                // Token not found, handle the error accordingly
+                console.log('Token not found');
+                return;
+            }
             setLoading(true);
-            const result = await axios.get(`${apiUrl}/suratkeluar`);
-            console.log(`${apiUrl}/suratkeluar`);
-            setData(result.data);
-            setRecords(result.data);
-            setLoading(false);
+            try {
+                setToken(privateToken);
+                const response = await axios.get(`${apiUrl}/suratkeluar`, {
+                    headers: {
+                        Authorization: `Bearer ${privateToken}` // Include the token in the request headers
+                    }
+                });
+                setData(response.data); 
+                setRecords(response.data);
+                setLoading(false);
+            } catch (error) {
+                
+            }
+            
         };
         fetchData();
     }, []);
@@ -139,6 +156,13 @@ const SuratKeluar = () => {
 
     const navigate = useNavigate();
     const handleSaveChanges = async () => {
+
+        if (!token) {
+            // Token not found, handle the error accordingly
+            console.log('Token not found');
+            return;
+        }
+
         if (!selectedFile || !formValues.judul || !formValues.noSurat
             || !formValues.tanggalSurat || !formValues.jenisSurat) {
             // jika ada input yang kosong, munculkan pesan error
@@ -163,7 +187,11 @@ const SuratKeluar = () => {
         formData.append('jenis_surat', formValues.jenisSurat);
 
         try {
-            const response = await axios.post(`${apiUrl}/suratkeluar`, formData);
+            const response = await axios.post(`${apiUrl}/suratkeluar`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}` // Include the token in the request headers
+                }
+            });
             console.log(response.data);
             // redirect to the page you want to reload
             navigate(0);

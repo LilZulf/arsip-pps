@@ -37,6 +37,14 @@ export const UpdateSuratKeluar = () => {
     }, []);
 
     const handleSaveChanges = async (e) => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            // Token not found, handle the error accordingly
+            console.log('Token not found');
+            return;
+        }
+
         if (!selectedFile || !singleData.judul || !singleData.no_surat
             || !singleData.tanggal_surat || !singleData.jenis_surat) {
             // jika ada input yang kosong, munculkan pesan error
@@ -63,7 +71,11 @@ export const UpdateSuratKeluar = () => {
 
         try {
             e.preventDefault();
-            const response = await axios.patch(`${apiUrl}/suratkeluar/${id}`, formData);
+            const response = await axios.patch(`${apiUrl}/suratkeluar/${id}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             console.log(response.data);
             // redirect to the page you want to reload
             navigate("/surat/keluar");
