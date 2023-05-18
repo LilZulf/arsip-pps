@@ -111,13 +111,13 @@ const SuratKeluar = () => {
                         Authorization: `Bearer ${privateToken}` // Include the token in the request headers
                     }
                 });
-                setData(response.data); 
+                setData(response.data);
                 setRecords(response.data);
                 setLoading(false);
             } catch (error) {
-                
+
             }
-            
+
         };
         fetchData();
     }, []);
@@ -221,7 +221,11 @@ const SuratKeluar = () => {
             return;
         }
         try {
-            const response = await axios.delete(`${apiUrl}/suratkeluar/${id}`);
+            const response = await axios.delete(`${apiUrl}/suratkeluar/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}` // Include the token in the request headers
+                }
+            });
             // Show success message
             window.alert(`Deleted data with ID ${id}`);
             console.log(`Deleted data with ID ${id}:`, response.data);

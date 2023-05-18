@@ -1,13 +1,20 @@
 import React from 'react'
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import BasicCard from '../components/BasicCard';
 
 export default function MainNavbar() {
+  const nama = localStorage.getItem('username');
   const imageBasePath =
     window.location.protocol + "//" + window.location.host + "/dist/img/";
+    const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  }
   return (
     <>
       <div className="wrapper">
+
 
         {/* Navbar */}
         <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -19,17 +26,62 @@ export default function MainNavbar() {
           </ul>
           {/* Right navbar links */}
           <ul className="navbar-nav ml-auto">
-            {/* Profile */}
-            <li className="nav-item">
-              <div className="user-panel pb-3 d-flex">
+            <li className="nav-item dropdown">
+              <a className="user-panel pb-3 d-flex" data-toggle="dropdown" href="#">
                 <div className="image">
-                  <img  src={imageBasePath + "user2-160x160.jpg"} className="img-circle elevation-2" alt="User Image" />
+                  <img src={imageBasePath + "user2-160x160.jpg"} className="img-circle elevation-2" alt="User Image" />
                 </div>
                 <div className="info">
-                  <a href="#" className="d-block">Admin PPS</a>
+                  <a href="#" className="d-block">{nama}</a>
                 </div>
+              </a>
+              <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <a href="#" className="dropdown-item">
+                  <div className="media">
+                    <div className="media-body">
+                      <h3 className="dropdown-item-title">
+                        Profile
+                        <span className="float-right text-md"><i className="fas fa-user-circle" /></span>
+                      </h3>
+                    </div>
+                  </div>
+                </a>
+                <div className="dropdown-divider" />
+                <a href="#" className="dropdown-item">
+                  <div className="media">
+                    <div className="media-body">
+                      <h3 className="dropdown-item-title">
+                        Setting
+                        <span className="float-right text-md"><i className="fas fa-wrench" /></span>
+                      </h3>
+                    </div>
+                  </div>
+                </a>
+                <div className="dropdown-divider" />
+                <Link href="#" onClick={handleLogout} className="dropdown-item">
+                  <div className="media">
+                    <div className="media-body">
+                      <h3 className="dropdown-item-title">
+                        Logout
+                        <span className="float-right text-md"><i className="fas fa-sign-out-alt" /></span>
+                      </h3>
+                    </div>
+                  </div>
+                </Link>
+                <div className="dropdown-divider" />
               </div>
             </li>
+            {/* Profile */}
+            {/* <li className="nav-item dropdown">
+              <div className="user-panel pb-3 d-flex">
+                <div className="image">
+                  <img src={imageBasePath + "user2-160x160.jpg"} className="img-circle elevation-2" alt="User Image" />
+                </div>
+                <div className="info">
+                  <a href="#" className="d-block">{nama}</a>
+                </div>
+              </div>
+            </li> */}
           </ul>
         </nav>
         {/* /.navbar */}
@@ -37,7 +89,7 @@ export default function MainNavbar() {
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
           {/* Brand Logo */}
           <a href="index3.html" className="brand-link">
-            <img  src={imageBasePath + "AdminLTELogo.png"} alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} />
+            <img src={imageBasePath + "AdminLTELogo.png"} alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} />
             <span className="brand-text font-weight-light">Arsip PPS</span>
           </a>
           {/* Sidebar */}
@@ -84,7 +136,7 @@ export default function MainNavbar() {
             </div>{/* /.container-fluid */}
           </section>
           {/* Main content */}
-          
+
           <BasicCard>
             <Outlet />
           </BasicCard>

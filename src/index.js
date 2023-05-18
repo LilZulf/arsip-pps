@@ -21,6 +21,9 @@ export default function App() {
     if (isLoggedIn && (location.pathname === '/login' || location.pathname === '/register')) {
       // If user is logged in and on the login or register page, redirect to dashboard
       navigate('/');
+    } else if (!isLoggedIn && location.pathname === '/register') {
+      // If user is not logged in and on the register page, allow access
+      return;
     } else if (!isLoggedIn && location.pathname !== '/login') {
       // If user is not logged in and not on the login page, redirect to login
       navigate('/login');

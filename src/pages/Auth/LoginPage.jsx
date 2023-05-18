@@ -22,7 +22,7 @@ const LoginPage = () => {
     const handleLogin = async () => {
         if (!formValues.email || !formValues.password) {
             // jika ada input yang kosong, munculkan pesan error
-            alert('Silakan lengkapi semua input terlebih dahulu!');
+            alert('Silahkan lengkapi semua input terlebih dahulu!');
             return;
         }
 
@@ -36,7 +36,8 @@ const LoginPage = () => {
             const token = response.data.token;
             // Store the token in localStorage or any other appropriate storage
             localStorage.setItem('token', token);
-
+            localStorage.setItem('username', response.data.nama);
+            localStorage.setItem('userid', response.data.id);
             // Include the token in subsequent requests
             axios.defaults.headers.common['Authorization'] = token;
 
@@ -70,10 +71,10 @@ const LoginPage = () => {
                 <div className="card">
                     <div className="card-body login-card-body">
                         <p className="login-box-msg">Sign in to start your session</p>
-                        <form action="#" method="post">
+                        <form>
                             <div className="input-group mb-3">
                                 <input type="email" className="form-control" name='email' placeholder="Email"
-                                    value={formValues.email} onChange={handleInputChange} required />
+                                    value={formValues.email} onChange={handleInputChange} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-envelope" />
@@ -82,7 +83,7 @@ const LoginPage = () => {
                             </div>
                             <div className="input-group mb-3">
                                 <input type="password" className="form-control" name='password' placeholder="Password"
-                                    value={formValues.password} onChange={handleInputChange} required />
+                                    value={formValues.password} onChange={handleInputChange} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-lock" />
@@ -106,10 +107,10 @@ const LoginPage = () => {
                             </div>
                         </form>
                         <p className="mb-1">
-                            <a href="forgot-password.html">I forgot my password</a>
+                            <a href="forgot-password.html" >I forgot my password</a>
                         </p>
                         <p className="mb-0">
-                            <a href="register.html" className="text-center">Register as panitia</a>
+                            <Link to={'/register'} className="text-center">Register as panitia</Link>
                         </p>
                     </div>
                     {/* /.login-card-body */}
