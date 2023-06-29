@@ -4,7 +4,7 @@ import BasicTable from "../../components/BasicTable";
 import Modal from "../../components/Modal";
 import { useNavigate, Link } from 'react-router-dom';
 
-const SuratKeluar = () => {
+const SuratMasuk = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
     /**
     * React Hook untuk state 
@@ -68,7 +68,7 @@ const SuratKeluar = () => {
                     <div className="col-md-10 my-2">
                         <Link className="btn btn-block bg-gradient-success"
                             variant="primary"
-                            to={`/surat/keluar/${data.id}`}
+                            to={`/surat/masuk/${data.id}`}
                         >
                             Edit
                         </Link>
@@ -101,7 +101,7 @@ const SuratKeluar = () => {
             setLoading(true);
             try {
                 setToken(privateToken);
-                const response = await axios.get(`${apiUrl}/suratkeluar`, {
+                const response = await axios.get(`${apiUrl}/suratmasuk`, {
                     headers: {
                         Authorization: `Bearer ${privateToken}` // Include the token in the request headers
                     }
@@ -159,7 +159,7 @@ const SuratKeluar = () => {
         }
 
         if (!selectedFile || !formValues.judul || !formValues.noSurat
-            || !formValues.tanggalSurat) {
+            || !formValues.tanggalSurat ) {
             // jika ada input yang kosong, munculkan pesan error
             alert('Silakan lengkapi semua input terlebih dahulu!');
             return;
@@ -181,7 +181,7 @@ const SuratKeluar = () => {
         formData.append('status', formValues.status);
 
         try {
-            const response = await axios.post(`${apiUrl}/suratkeluar`, formData, {
+            const response = await axios.post(`${apiUrl}/suratmasuk`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}` // Include the token in the request headers
                 }
@@ -215,7 +215,7 @@ const SuratKeluar = () => {
             return;
         }
         try {
-            const response = await axios.delete(`${apiUrl}/suratkeluar/${id}`, {
+            const response = await axios.delete(`${apiUrl}/suratmasuk/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}` // Include the token in the request headers
                 }
@@ -241,7 +241,7 @@ const SuratKeluar = () => {
 
     return (
         <>
-            <h1>Surat Keluar</h1>
+            <h1>Surat Masuk</h1>
             <div className="row my-2">
                 <div className="col">
                     <input
@@ -257,7 +257,7 @@ const SuratKeluar = () => {
                         data-toggle="modal" data-target="#modal-lg"
                         className="btn btn-block btn-outline-primary" >
                         <i className="fa fa-plus mx-1"></i>
-                        Add Surat Keluar
+                        Add Surat Masuk
                     </button>
                 </div>
             </div>
@@ -270,7 +270,7 @@ const SuratKeluar = () => {
             ) : (
                 <BasicTable columns={columns} data={records} />
             )}
-            <Modal id="modal-lg" title="Surat Keluar" footerButtons={footerButtons}>
+            <Modal id="modal-lg" title="Surat Masuk" footerButtons={footerButtons}>
                 <form>
                     <div className="form-group">
                         <label htmlFor="noSurat">No Surat</label>
@@ -307,4 +307,4 @@ const SuratKeluar = () => {
         </>
     );
 }
-export default SuratKeluar
+export default SuratMasuk

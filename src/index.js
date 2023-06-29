@@ -7,7 +7,8 @@ import SuratKeluar from "./pages/SuratKeluar/SuratKeluar";
 import LoginPage from "./pages/Auth/LoginPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
 import { UpdateSuratKeluar } from "./pages/SuratKeluar/UpdateSuratKeluar";
-import SuratMasuk from "./pages/SuratMasuk";
+import SuratMasuk from "./pages/SuratMasuk/SuratMasuk";
+import {UpdateSuratMasuk} from "./pages/SuratMasuk/UpdateSuratMasuk";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import './Transitions.css'; // file CSS untuk animasi
 import { useEffect } from "react";
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="/surat/keluar" element={<SuratKeluar />} />
         <Route path="/surat/keluar/:id" element={<UpdateSuratKeluar />} />
         <Route path="/surat/masuk" element={<SuratMasuk />} />
+        <Route path="/surat/masuk" element={<UpdateSuratMasuk />} />
       </Route>
     </Routes>
   );
