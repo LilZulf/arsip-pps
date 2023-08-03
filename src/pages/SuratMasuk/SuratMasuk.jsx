@@ -6,14 +6,18 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const SuratMasuk = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
+    const sessionUid = localStorage.getItem('userid');
+    const fileUrl = process.env.REACT_APP_FILE_URL;
     /**
     * React Hook untuk state 
     */
     const [data, setData] = useState([]);
+    const [jenisSuratData, setJenisSuratData] = useState([]);
     const [token, setToken] = useState('');
     const [records, setRecords] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
     const [loading, setLoading] = useState(false);
+    
     const [formValues, setFormValues] = useState({
         noSurat: "",
         judul: "",
@@ -52,7 +56,7 @@ const SuratMasuk = () => {
                 return (
                     <Link
                         target="_blank"
-                        to={data.file}
+                        to={fileUrl + "/" + data.file}
                     >
                         <p>
                             <i className="fa fa-file mx-1"></i>
@@ -75,6 +79,7 @@ const SuratMasuk = () => {
                         <button className="btn btn-block bg-gradient-danger"
                             role={"button"}
                             variant="danger"
+                            disabled={sessionUid !== data.uid}
                             onClick={() => handleDelete(data.id)}>
                             Delete
                         </button>
@@ -106,13 +111,19 @@ const SuratMasuk = () => {
                         Authorization: `Bearer ${privateToken}` // Include the token in the request headers
                     }
                 });
-                setData(response.data);
-                setRecords(response.data);
+                const jenisSuratRes = await axios.get(`${apiUrl}/jenissurat`, {
+                    headers: {
+                        Authorization: `Bearer ${privateToken}` // Include the token in the request headers
+                    }
+                });
+                setData(response.data.data);
+                setRecords(response.data.data);
                 setLoading(false);
             } catch (error) {
-
+                // If the API returns an error, the token is either blacklisted or expired
+                localStorage.clear();
+                navigate('/login');
             }
-
         };
         fetchData();
     }, []);
@@ -159,7 +170,7 @@ const SuratMasuk = () => {
         }
 
         if (!selectedFile || !formValues.judul || !formValues.noSurat
-            || !formValues.tanggalSurat ) {
+            || !formValues.tanggalSurat) {
             // jika ada input yang kosong, munculkan pesan error
             alert('Silakan lengkapi semua input terlebih dahulu!');
             return;
@@ -170,14 +181,7 @@ const SuratMasuk = () => {
         formData.append('judul', formValues.judul);
         formData.append('no_surat', formValues.noSurat);
         formData.append('tanggal_surat', formValues.tanggalSurat);
-
-        const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const year = today.getFullYear();
-        const currentDate = day + '-' + month + '-' + year;
-
-        formData.append('tanggal_upload', currentDate);
+        formData.append('jenis_surat', formValues.jenisSurat);
         formData.append('status', formValues.status);
 
         try {
@@ -186,7 +190,7 @@ const SuratMasuk = () => {
                     Authorization: `Bearer ${token}` // Include the token in the request headers
                 }
             });
-            console.log(response.data);
+            console.log(response.data.data);
             // redirect to the page you want to reload
             navigate(0);
         } catch (error) {
@@ -222,7 +226,7 @@ const SuratMasuk = () => {
             });
             // Show success message
             window.alert(`Deleted data with ID ${id}`);
-            console.log(`Deleted data with ID ${id}:`, response.data);
+            console.log(`Deleted data with ID ${id}:`, response.data.data);
             navigate(0);
         } catch (error) {
             // Show error message
@@ -288,16 +292,17 @@ const SuratMasuk = () => {
                         <label htmlFor="statusSurat">Status Surat</label>
                         <input type="text" className="form-control" name="status" value={formValues.status} onChange={handleInputChange} />
                     </div>
-                    {/* <div className="form-group">
-                        <label htmlFor="jenisSurat">Jenis Surat</label>
+                    <div className="form-group">
+                        <label htmlFor="jenisSuratData">Jenis Surat</label>
                         <select className="form-control" name="jenisSurat" id="jenisSurat" value={formValues.jenisSurat} onChange={handleInputChange}>
                             <option value="">Pilih jenis surat</option>
-                            <option value="1">Berita Acara</option>
-                            <option value="2">SK</option>
-                            <option value="3">Surat Pengumuman</option>
-                            <option value="4">Surat Undangan</option>
+                            {jenisSuratData.map((jenisSurat) => (
+                                <option key={jenisSurat.id} value={jenisSurat.id}>
+                                    {jenisSurat.nama} {/* Assuming the API returns a property 'nama' for each jenisSurat */}
+                                </option>
+                            ))}
                         </select>
-                    </div> */}
+                    </div>
                     <div className="form-group">
                         <label htmlFor="file">File</label>
                         <input type="file" className="form-control-file" id="file" onChange={handleFileInputChange} />

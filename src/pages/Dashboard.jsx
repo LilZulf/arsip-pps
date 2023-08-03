@@ -1,5 +1,6 @@
 import React from 'react';
 import PieChart from '../components/PieChart';
+import IframeEmbed from '../components/IframeEmbed';
 
 const Dashboard = () => {
     const chartData1 = {
@@ -9,7 +10,7 @@ const Dashboard = () => {
     };
     const chartData2 = {
         labels: ['Laki-Laki', 'Perempuan'],
-        values: [2445, 2547,],
+        values: [2419, 2517,],
         colors: ['#36A2EB', '#FF6384'],
     };
 

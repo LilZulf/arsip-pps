@@ -6,6 +6,7 @@ import axios from "axios";
 export const UpdateSuratKeluar = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [singleData, setSingleData] = useState('');
+    const [jenisSuratData, setJenisSuratData] = useState([]);
     const navigate = useNavigate();
     const { id } = useParams();
     const [selectedFile, setSelectedFile] = useState(null);
@@ -25,12 +26,31 @@ export const UpdateSuratKeluar = () => {
     };
 
     useEffect(() => {
+        const privateToken = localStorage.getItem('token');
+        if (!privateToken) {
+            // Token not found, handle the error accordingly
+            console.log('Token not found');
+            return;
+        }
         const fetchDataById = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/suratkeluar/${id}`);
-                setSingleData(response.data);
+                const response = await axios.get(`${apiUrl}/suratkeluar/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${privateToken}` // Include the token in the request headers
+                    }
+                });
+                const jenisSuratRes = await axios.get(`${apiUrl}/jenissurat`, {
+                    headers: {
+                        Authorization: `Bearer ${privateToken}` // Include the token in the request headers
+                    }
+                });
+                setJenisSuratData(jenisSuratRes.data.data);
+                setSingleData(response.data.data[0]);
             } catch (error) {
                 console.error(error);
+                 // If the API returns an error, the token is either blacklisted or expired
+                localStorage.clear();
+                navigate('/login');
             }
         };
         fetchDataById();
@@ -46,7 +66,7 @@ export const UpdateSuratKeluar = () => {
         }
 
         if (!selectedFile || !singleData.judul || !singleData.no_surat
-            || !singleData.tanggal_surat || !singleData.jenis_surat) {
+            || !singleData.tanggal_surat) {
             // jika ada input yang kosong, munculkan pesan error
             alert('Silakan lengkapi semua input terlebih dahulu!');
             console.log(singleData);
@@ -58,20 +78,13 @@ export const UpdateSuratKeluar = () => {
         formData.append('judul', singleData.judul);
         formData.append('no_surat', singleData.no_surat);
         formData.append('tanggal_surat', singleData.tanggal_surat);
-
-        const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const year = today.getFullYear();
-        const currentDate = day + '-' + month + '-' + year;
-
-        formData.append('tanggal_upload', currentDate);
-        formData.append('status', singleData.status);
         formData.append('jenis_surat', singleData.jenis_surat);
+        formData.append('status', singleData.status);
+
 
         try {
             e.preventDefault();
-            const response = await axios.patch(`${apiUrl}/suratkeluar/${id}`, formData, {
+            const response = await axios.post(`${apiUrl}/suratkeluar/${id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -120,13 +133,14 @@ export const UpdateSuratKeluar = () => {
                     <input type="text" className="form-control" name="status" value={singleData.status || ""} onChange={handleInputChange} />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="jenis_surat">Jenis Surat</label>
+                    <label htmlFor="jenisSuratData">Jenis Surat</label>
                     <select className="form-control" name="jenis_surat" id="jenis_surat" value={singleData.jenis_surat || ""} onChange={handleInputChange}>
                         <option value="">Pilih jenis surat</option>
-                        <option value="1">Berita Acara</option>
-                        <option value="2">SK</option>
-                        <option value="3">Surat Pengumuman</option>
-                        <option value="4">Surat Undangan</option>
+                        {jenisSuratData.map((jenisSurat) => (
+                            <option key={jenisSurat.id} value={jenisSurat.id}>
+                                {jenisSurat.nama} {/* Assuming the API returns a property 'nama' for each jenisSurat */}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div className="form-group">

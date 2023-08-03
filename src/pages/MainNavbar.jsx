@@ -1,16 +1,19 @@
-import React from 'react'
 import { Outlet, Link, useNavigate } from "react-router-dom";
+import React, {useEffect } from "react";
 import BasicCard from '../components/BasicCard';
 
 export default function MainNavbar() {
+  const isLoggedIn = !!localStorage.getItem('token');
+  const apiUrl = process.env.REACT_APP_API_URL;
   const nama = localStorage.getItem('username');
   const imageBasePath =
     window.location.protocol + "//" + window.location.host + "/dist/img/";
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.clear();
     navigate('/login');
   }
+
   return (
     <>
       <div className="wrapper">
@@ -88,7 +91,7 @@ export default function MainNavbar() {
         {/* Main Sidebar Container */}
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
           {/* Brand Logo */}
-          <a href="index3.html" className="brand-link">
+          <a href="#" className="brand-link">
             <img src={imageBasePath + "AdminLTELogo.png"} alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} />
             <span className="brand-text font-weight-light">Arsip PPS</span>
           </a>

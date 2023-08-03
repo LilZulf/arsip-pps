@@ -31,13 +31,13 @@ const LoginPage = () => {
         formData.append('password', formValues.password);
 
         try {
-            const response = await axios.post(`${apiUrl}/user/login`, formData);
+            const response = await axios.post(`${apiUrl}/login`, formData);
             console.log(response.data);
             const token = response.data.token;
             // Store the token in localStorage or any other appropriate storage
             localStorage.setItem('token', token);
-            localStorage.setItem('username', response.data.nama);
-            localStorage.setItem('userid', response.data.id);
+            localStorage.setItem('username', response.data.user.name);
+            localStorage.setItem('userid', response.data.user.id);
             // Include the token in subsequent requests
             axios.defaults.headers.common['Authorization'] = token;
 
