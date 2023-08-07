@@ -118,6 +118,7 @@ const SuratMasuk = () => {
                 });
                 setData(response.data.data);
                 setRecords(response.data.data);
+                setJenisSuratData(jenisSuratRes.data.data);
                 setLoading(false);
             } catch (error) {
                 // If the API returns an error, the token is either blacklisted or expired
