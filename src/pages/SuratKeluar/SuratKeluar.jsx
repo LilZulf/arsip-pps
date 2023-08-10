@@ -103,7 +103,7 @@ const SuratKeluar = () => {
         const fetchData = async () => {
             // Get the token from localStorage or any other storage mechanism
             const privateToken = localStorage.getItem('token');
-            console.log(privateToken);
+            //console.log(privateToken);
             if (!privateToken) {
                 // Token not found, handle the error accordingly
                 console.log('Token not found');
@@ -199,7 +199,7 @@ const SuratKeluar = () => {
                     Authorization: `Bearer ${token}` // Include the token in the request headers
                 }
             });
-            console.log(response.data.data);
+            //console.log(response.data.data);
             // redirect to the page you want to reload
             navigate(0);
         } catch (error) {

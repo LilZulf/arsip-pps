@@ -191,7 +191,7 @@ const SuratMasuk = () => {
                     Authorization: `Bearer ${token}` // Include the token in the request headers
                 }
             });
-            console.log(response.data.data);
+            //console.log(response.data.data);
             // redirect to the page you want to reload
             navigate(0);
         } catch (error) {

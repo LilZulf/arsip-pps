@@ -32,7 +32,7 @@ const LoginPage = () => {
 
         try {
             const response = await axios.post(`${apiUrl}/login`, formData);
-            console.log(response.data);
+            // console.log(response.data);
             const token = response.data.token;
             // Store the token in localStorage or any other appropriate storage
             localStorage.setItem('token', token);

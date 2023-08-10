@@ -61,7 +61,7 @@ export const UpdateSuratKeluar = () => {
 
         if (!token) {
             // Token not found, handle the error accordingly
-            console.log('Token not found');
+            //console.log('Token not found');
             return;
         }
 
@@ -69,7 +69,7 @@ export const UpdateSuratKeluar = () => {
             || !singleData.tanggal_surat) {
             // jika ada input yang kosong, munculkan pesan error
             alert('Silakan lengkapi semua input terlebih dahulu!');
-            console.log(singleData);
+            //console.log(singleData);
             return;
         }
 
@@ -89,7 +89,7 @@ export const UpdateSuratKeluar = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log(response.data);
+            //console.log(response.data);
             // redirect to the page you want to reload
             navigate("/surat/keluar");
         } catch (error) {

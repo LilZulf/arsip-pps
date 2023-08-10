@@ -87,7 +87,7 @@ export const UpdateSuratMasuk = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log(response.data);
+            //console.log(response.data);
             // redirect to the page you want to reload
             navigate("/surat/masuk");
         } catch (error) {

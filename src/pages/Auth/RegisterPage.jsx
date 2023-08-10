@@ -41,7 +41,7 @@ const RegisterPage = () => {
 
         try {
             const response = await axios.post(`${apiUrl}/user/register`, formData);
-            console.log(response.data);
+            //console.log(response.data);
             navigate('/login');
         } catch (error) {
             if (error.response) {
